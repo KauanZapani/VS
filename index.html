@@ -1,43 +1,49 @@
-<!doctype html>
-<a class="btn-primary" href="reservar.html?room=aud">Reservar</a>
+<!DOCTYPE html>
 </div>
-</article>
+<div class="sala-card">
+<h3>Auditório</h3>
+<p>Capacidade: 80 pessoas</p>
+<button>Reservar</button>
+</div>
+<div class="sala-card">
+<h3>Laboratório de Ciências</h3>
+<p>Capacidade: 20 alunos</p>
+<button>Reservar</button>
+</div>
+</div>
+</section>
 
 
+<!-- ===== Admin Section ===== -->
+<section id="admin" class="admin">
+<h2>Painel Administrativo</h2>
+<div class="admin-panels">
+<div class="panel">
+<h3>Reservas Recentes</h3>
+<table>
+<thead>
+<tr><th>Sala</th><th>Data</th><th>Usuário</th></tr>
+</thead>
+<tbody>
+<tr><td>Informática</td><td>08/10/2025</td><td>Maria</td></tr>
+<tr><td>Auditório</td><td>09/10/2025</td><td>João</td></tr>
+</tbody>
+</table>
+</div>
+<div class="panel">
+<h3>Alertas Arduino</h3>
+<ul class="alertas">
+<li>⚠️ Porta aberta - Sala de Ciências</li>
+<li>🌡️ Temperatura alta - Auditório</li>
+</ul>
+</div>
 </div>
 </section>
 
 
-<section class="how-it-works">
-<h3>Como Funciona</h3>
-<div class="steps">
-<div class="step">
-<strong>1</strong>
-<p>Escolha a sala e o horário.</p>
-</div>
-<div class="step">
-<strong>2</strong>
-<p>Selecione equipamentos adicionais (se necessário).</p>
-</div>
-<div class="step">
-<strong>3</strong>
-<p>Acompanhe a confirmação pelo painel ou aplicativo.</p>
-</div>
-</div>
-</section>
-</main>
-
-
-<footer class="site-footer">
-<div class="container">
-<p>© <span id="year"></span> VigiaSchool — Escola Exemplo</p>
-</div>
+<!-- ===== Footer ===== -->
+<footer>
+<p>© 2025 VigiaSchool. Todos os direitos reservados.</p>
 </footer>
-
-
-<script>
-// Preencher ano do rodapé
-document.getElementById('year').textContent = new Date().getFullYear();
-</script>
 </body>
 </html>

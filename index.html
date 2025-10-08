@@ -1,137 +1,189 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VigiaSchool</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VigiaSchool - Reserva de Salas</title>
+    <style>
+        /* Reset básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #f0f4f8;
+            color: #333;
+        }
+
+        header {
+            background-color: #0056b3;
+            color: white;
+            padding: 20px 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin-bottom: 10px;
+        }
+
+        .search-bar {
+            margin-top: 10px;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            width: 50%;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            color: #0056b3;
+        }
+
+        .card p {
+            margin-bottom: 15px;
+        }
+
+        .reserve-btn {
+            padding: 10px 15px;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .reserve-btn:hover {
+            background-color: #003d80;
+        }
+
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #ff4c4c;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            display: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <h1>VigiaSchool</h1>
+        <p>Reserve suas salas de forma prática e segura!</p>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Pesquisar salas...">
+        </div>
+    </header>
 
-  <!-- ===== Header ===== -->
-  <header>
-    <div class="logo">
-      <img src="https://img.icons8.com/ios-filled/50/ffffff/school-building.png" alt="Logo">
-      <h1>VigiaSchool</h1>
+    <div class="container" id="roomsContainer">
+        <!-- Cards de salas -->
+        <div class="card" data-name="Laboratório de Química">
+            <h3>Laboratório de Química</h3>
+            <p>Capacidade: 30 pessoas</p>
+            <button class="reserve-btn" onclick="reserveRoom('Laboratório de Química')">Reservar</button>
+        </div>
+
+        <div class="card" data-name="Sala de Jogos">
+            <h3>Sala de Jogos</h3>
+            <p>Capacidade: 20 pessoas</p>
+            <button class="reserve-btn" onclick="reserveRoom('Sala de Jogos')">Reservar</button>
+        </div>
+
+        <div class="card" data-name="Laboratório de Informática">
+            <h3>Laboratório de Informática</h3>
+            <p>Capacidade: 25 pessoas</p>
+            <button class="reserve-btn" onclick="reserveRoom('Laboratório de Informática')">Reservar</button>
+        </div>
+
+        <div class="card" data-name="Sala de Artes">
+            <h3>Sala de Artes</h3>
+            <p>Capacidade: 15 pessoas</p>
+            <button class="reserve-btn" onclick="reserveRoom('Sala de Artes')">Reservar</button>
+        </div>
+
+        <div class="card" data-name="Auditório">
+            <h3>Auditório</h3>
+            <p>Capacidade: 100 pessoas</p>
+            <button class="reserve-btn" onclick="reserveRoom('Auditório')">Reservar</button>
+        </div>
     </div>
-    <nav>
-      <ul>
-        <li><a href="#home">Início</a></li>
-        <li><a href="#salas">Salas</a></li>
-        <li><a href="#admin">Admin</a></li>
-      </ul>
-    </nav>
-  </header>
 
-  <!-- ===== Seção Hero ===== -->
-  <section id="home" class="hero">
-    <h1>Bem-vindo ao VigiaSchool</h1>
-    <p>Gerencie suas salas, reservas e alertas com praticidade.</p>
-  </section>
+    <div class="alert" id="alertBox">Alerta: Alguém está usando uma sala sem reserva!</div>
 
-  <!-- ===== Seção de Salas Disponíveis ===== -->
-  <section id="salas" class="salas-section">
-    <h2>Salas Disponíveis</h2>
+    <script>
+        const roomsContainer = document.getElementById('roomsContainer');
+        const searchInput = document.getElementById('searchInput');
+        const alertBox = document.getElementById('alertBox');
 
-    <!-- Barra de Pesquisa -->
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Pesquisar sala por nome..." />
-    </div>
+        // Função de pesquisa
+        searchInput.addEventListener('keyup', () => {
+            const query = searchInput.value.toLowerCase();
+            const rooms = roomsContainer.getElementsByClassName('card');
+            for (let room of rooms) {
+                const name = room.dataset.name.toLowerCase();
+                room.style.display = name.includes(query) ? 'block' : 'none';
+            }
+        });
 
-    <!-- Lista de Salas -->
-    <div class="salas-container" id="salasContainer">
-      <div class="sala-card">
-        <h3>Sala 101</h3>
-        <p>Capacidade: 30 alunos</p>
-        <button>Reservar</button>
-      </div>
-      <div class="sala-card">
-        <h3>Sala 102</h3>
-        <p>Capacidade: 25 alunos</p>
-        <button>Reservar</button>
-      </div>
-      <div class="sala-card">
-        <h3>Sala de Informática</h3>
-        <p>Capacidade: 20 alunos</p>
-        <button>Reservar</button>
-      </div>
-      <div class="sala-card">
-        <h3>Laboratório de Ciências</h3>
-        <p>Capacidade: 15 alunos</p>
-        <button>Reservar</button>
-      </div>
-      <div class="sala-card">
-        <h3>Sala Multiuso</h3>
-        <p>Capacidade: 40 alunos</p>
-        <button>Reservar</button>
-      </div>
-      <div class="sala-card">
-        <h3>Sala de Artes</h3>
-        <p>Capacidade: 18 alunos</p>
-        <button>Reservar</button>
-      </div>
-    </div>
-  </section>
+        // Simulação de alerta de uso sem reserva
+        function showAlert() {
+            alertBox.style.display = 'block';
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 3000);
+        }
 
-  <!-- ===== Painel Administrativo ===== -->
-  <section id="admin" class="admin-section">
-    <h2>Painel Administrativo</h2>
+        // Função de reserva
+        function reserveRoom(roomName) {
+            const reserved = confirm(`Deseja realmente reservar a sala "${roomName}"?`);
+            if (reserved) {
+                alert(`${roomName} reservada com sucesso!`);
+            } else {
+                showAlert(); // Mostra alerta se não reservar
+            }
+        }
 
-    <div class="admin-container">
-      <div class="admin-card">
-        <h3>Reservas Recentes</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Sala</th>
-              <th>Usuário</th>
-              <th>Data</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Sala 101</td>
-              <td>Maria</td>
-              <td>08/10/2025</td>
-            </tr>
-            <tr>
-              <td>Lab. Ciências</td>
-              <td>João</td>
-              <td>08/10/2025</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="admin-card">
-        <h3>Alertas Arduino</h3>
-        <ul>
-          <li>🔴 Sala 102 - Porta aberta fora de horário</li>
-          <li>🟡 Lab. Ciências - Sensor de presença ativado</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== Footer ===== -->
-  <footer>
-    <p>© 2025 VigiaSchool - Sistema de Gestão Escolar</p>
-  </footer>
-
-  <!-- ===== Script de Pesquisa ===== -->
-  <script>
-    const searchInput = document.getElementById('searchInput');
-    const salasContainer = document.getElementById('salasContainer');
-    const salaCards = salasContainer.getElementsByClassName('sala-card');
-
-    searchInput.addEventListener('keyup', function () {
-      const filtro = searchInput.value.toLowerCase();
-      for (let i = 0; i < salaCards.length; i++) {
-        const nomeSala = salaCards[i].getElementsByTagName('h3')[0].innerText.toLowerCase();
-        salaCards[i].style.display = nomeSala.includes(filtro) ? '' : 'none';
-      }
-    });
-  </script>
-
+        // Simulação: alerta aleatório de uso sem reserva
+        setInterval(() => {
+            const random = Math.random();
+            if (random < 0.1) { // 10% de chance
+                showAlert();
+            }
+        }, 10000); // a cada 10 segundos
+    </script>
 </body>
 </html>

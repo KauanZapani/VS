@@ -1,49 +1,137 @@
 <!DOCTYPE html>
-</div>
-<div class="sala-card">
-<h3>Auditório</h3>
-<p>Capacidade: 80 pessoas</p>
-<button>Reservar</button>
-</div>
-<div class="sala-card">
-<h3>Laboratório de Ciências</h3>
-<p>Capacidade: 20 alunos</p>
-<button>Reservar</button>
-</div>
-</div>
-</section>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VigiaSchool</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+  <!-- ===== Header ===== -->
+  <header>
+    <div class="logo">
+      <img src="https://img.icons8.com/ios-filled/50/ffffff/school-building.png" alt="Logo">
+      <h1>VigiaSchool</h1>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#home">Início</a></li>
+        <li><a href="#salas">Salas</a></li>
+        <li><a href="#admin">Admin</a></li>
+      </ul>
+    </nav>
+  </header>
 
-<!-- ===== Admin Section ===== -->
-<section id="admin" class="admin">
-<h2>Painel Administrativo</h2>
-<div class="admin-panels">
-<div class="panel">
-<h3>Reservas Recentes</h3>
-<table>
-<thead>
-<tr><th>Sala</th><th>Data</th><th>Usuário</th></tr>
-</thead>
-<tbody>
-<tr><td>Informática</td><td>08/10/2025</td><td>Maria</td></tr>
-<tr><td>Auditório</td><td>09/10/2025</td><td>João</td></tr>
-</tbody>
-</table>
-</div>
-<div class="panel">
-<h3>Alertas Arduino</h3>
-<ul class="alertas">
-<li>⚠️ Porta aberta - Sala de Ciências</li>
-<li>🌡️ Temperatura alta - Auditório</li>
-</ul>
-</div>
-</div>
-</section>
+  <!-- ===== Seção Hero ===== -->
+  <section id="home" class="hero">
+    <h1>Bem-vindo ao VigiaSchool</h1>
+    <p>Gerencie suas salas, reservas e alertas com praticidade.</p>
+  </section>
 
+  <!-- ===== Seção de Salas Disponíveis ===== -->
+  <section id="salas" class="salas-section">
+    <h2>Salas Disponíveis</h2>
 
-<!-- ===== Footer ===== -->
-<footer>
-<p>© 2025 VigiaSchool. Todos os direitos reservados.</p>
-</footer>
+    <!-- Barra de Pesquisa -->
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Pesquisar sala por nome..." />
+    </div>
+
+    <!-- Lista de Salas -->
+    <div class="salas-container" id="salasContainer">
+      <div class="sala-card">
+        <h3>Sala 101</h3>
+        <p>Capacidade: 30 alunos</p>
+        <button>Reservar</button>
+      </div>
+      <div class="sala-card">
+        <h3>Sala 102</h3>
+        <p>Capacidade: 25 alunos</p>
+        <button>Reservar</button>
+      </div>
+      <div class="sala-card">
+        <h3>Sala de Informática</h3>
+        <p>Capacidade: 20 alunos</p>
+        <button>Reservar</button>
+      </div>
+      <div class="sala-card">
+        <h3>Laboratório de Ciências</h3>
+        <p>Capacidade: 15 alunos</p>
+        <button>Reservar</button>
+      </div>
+      <div class="sala-card">
+        <h3>Sala Multiuso</h3>
+        <p>Capacidade: 40 alunos</p>
+        <button>Reservar</button>
+      </div>
+      <div class="sala-card">
+        <h3>Sala de Artes</h3>
+        <p>Capacidade: 18 alunos</p>
+        <button>Reservar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Painel Administrativo ===== -->
+  <section id="admin" class="admin-section">
+    <h2>Painel Administrativo</h2>
+
+    <div class="admin-container">
+      <div class="admin-card">
+        <h3>Reservas Recentes</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Sala</th>
+              <th>Usuário</th>
+              <th>Data</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Sala 101</td>
+              <td>Maria</td>
+              <td>08/10/2025</td>
+            </tr>
+            <tr>
+              <td>Lab. Ciências</td>
+              <td>João</td>
+              <td>08/10/2025</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="admin-card">
+        <h3>Alertas Arduino</h3>
+        <ul>
+          <li>🔴 Sala 102 - Porta aberta fora de horário</li>
+          <li>🟡 Lab. Ciências - Sensor de presença ativado</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer>
+    <p>© 2025 VigiaSchool - Sistema de Gestão Escolar</p>
+  </footer>
+
+  <!-- ===== Script de Pesquisa ===== -->
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const salasContainer = document.getElementById('salasContainer');
+    const salaCards = salasContainer.getElementsByClassName('sala-card');
+
+    searchInput.addEventListener('keyup', function () {
+      const filtro = searchInput.value.toLowerCase();
+      for (let i = 0; i < salaCards.length; i++) {
+        const nomeSala = salaCards[i].getElementsByTagName('h3')[0].innerText.toLowerCase();
+        salaCards[i].style.display = nomeSala.includes(filtro) ? '' : 'none';
+      }
+    });
+  </script>
+
 </body>
 </html>
